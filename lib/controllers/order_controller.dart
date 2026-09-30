@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../core/utils/currency_converter.dart';
+import '../core/utils/formatters.dart';
 import '../models/app_user.dart';
 import '../models/delivery_zone.dart';
 import '../models/enums.dart';
@@ -172,6 +173,14 @@ class OrderController extends ChangeNotifier {
           orderId: orderId,
         ));
       }
+      // 6. Notification CLIENT : paiement simulé confirmé (bonus).
+      unawaited(_notifications.send(
+        userId: client.uid,
+        title: 'Paiement confirmé · ${order.orderNumber}',
+        body:
+            '${items.length} article(s) — Montant total : ${Formatters.price(total, currency)}',
+        orderId: orderId,
+      ));
       cart.clear();
       return orderId;
     } on Exception catch (e) {
@@ -190,11 +199,22 @@ class OrderController extends ChangeNotifier {
     notifyListeners();
     try {
       await _orders.cancelOrder(order);
+      // Client : confirmation de son annulation.
       unawaited(_notifications.send(
         userId: order.clientId,
         title: 'Commande ${order.orderNumber} annulée',
+        body: 'Annulation confirmée — le stock a été recrédité.',
         orderId: order.id,
       ));
+      // Vendeurs concernés : alerte d'annulation + restock.
+      for (final sellerId in order.sellerIds) {
+        unawaited(_notifications.send(
+          userId: sellerId,
+          title: 'Commande ${order.orderNumber} annulée',
+          body: 'Annulée par le client — stock recrédité automatiquement.',
+          orderId: order.id,
+        ));
+      }
       // Rafraîchissement local optimiste.
       final idx = myOrders.indexWhere((o) => o.id == order.id);
       if (idx >= 0) {

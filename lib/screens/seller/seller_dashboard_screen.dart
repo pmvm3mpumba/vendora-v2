@@ -6,6 +6,7 @@ import '../../app/seller_shell.dart';
 import '../../app/theme.dart';
 import '../../controllers/auth_controller.dart';
 import '../../controllers/currency_controller.dart';
+import '../../controllers/notification_controller.dart';
 import '../../controllers/seller_controller.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/widgets/charts.dart';
@@ -60,6 +61,7 @@ class SellerDashboardScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Espace vendeur'),
         automaticallyImplyLeading: false,
+        actions: const [_NotificationsBell()],
       ),
       body: SafeArea(
         child: ListView(
@@ -476,3 +478,32 @@ class _LegendRow extends StatelessWidget {
     );
   }
 }
+
+/// Cloche + badge des notifications non lues de l'espace vendeur —
+/// cliquer ouvre le centre de notifications (nouvelles commandes,
+/// annulations de clients…).
+class _NotificationsBell extends StatelessWidget {
+  const _NotificationsBell();
+
+  @override
+  Widget build(BuildContext context) {
+    final unread = context.watch<NotificationController>().unreadCount;
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: IconButton(
+        tooltip: 'Notifications',
+        onPressed: () =>
+            Navigator.of(context, rootNavigator: true)
+                .pushNamed(AppRoutes.notifications),
+        icon: Badge(
+          isLabelVisible: unread > 0,
+          label: Text(unread > 9 ? '9+' : '$unread'),
+          backgroundColor: AppTheme.brand,
+          textColor: Colors.white,
+          child: const Icon(Icons.notifications_outlined),
+        ),
+      ),
+    );
+  }
+}
+

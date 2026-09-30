@@ -12,6 +12,28 @@ import '../../core/widgets/state_views.dart';
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
 
+  /// Icône + couleur selon le TYPE de notification (déduit du titre) —
+  /// bonne pratique UX : on identifie l'action d'un coup d'œil.
+  static (IconData, Color) _styleFor(String title) {
+    final t = title.toLowerCase();
+    if (t.contains('paiement')) {
+      return (Icons.payments_outlined, AppTheme.brand);
+    }
+    if (t.contains('annul')) {
+      return (Icons.cancel_outlined, AppTheme.danger);
+    }
+    if (t.contains('livré')) {
+      return (Icons.local_shipping_outlined, AppTheme.greenText);
+    }
+    if (t.contains('confirm')) {
+      return (Icons.task_alt_outlined, AppTheme.greenText);
+    }
+    if (t.contains('nouvelle commande')) {
+      return (Icons.receipt_long_outlined, AppTheme.brand);
+    }
+    return (Icons.inventory_2_outlined, AppTheme.brand);
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthController>();
@@ -52,6 +74,7 @@ class NotificationsScreen extends StatelessWidget {
                             const SizedBox(height: 10),
                         itemBuilder: (_, i) {
                           final n = notifs.notifications[i];
+                          final (icon, color) = _styleFor(n.title);
                           return InkWell(
                             borderRadius:
                                 BorderRadius.circular(AppTheme.rLg),
@@ -82,16 +105,13 @@ class NotificationsScreen extends StatelessWidget {
                                     width: 40,
                                     height: 40,
                                     decoration: BoxDecoration(
-                                      color: context.isDark
-                                          ? AppTheme.brand
-                                              .withValues(alpha: 0.12)
-                                          : AppTheme.peach,
+                                      color: color.withValues(
+                                          alpha:
+                                              context.isDark ? 0.2 : 0.12),
                                       shape: BoxShape.circle,
                                     ),
-                                    child: const Icon(
-                                        Icons.inventory_2_outlined,
-                                        size: 19,
-                                        color: AppTheme.brand),
+                                    child: Icon(icon,
+                                        size: 19, color: color),
                                   ),
                                   const SizedBox(width: 12),
                                   Expanded(

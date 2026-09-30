@@ -101,6 +101,7 @@ class SellerController extends ChangeNotifier {
         unawaited(_notifications.send(
           userId: order.clientId,
           title: 'Commande ${order.orderNumber} : ${_statusLabel(status)}',
+          body: _statusBody(status),
           orderId: order.id,
         ));
       });
@@ -110,6 +111,17 @@ class SellerController extends ChangeNotifier {
         OrderStatus.confirmed => 'confirmée',
         OrderStatus.delivered => 'livrée',
         OrderStatus.cancelled => 'annulée',
+      };
+
+  /// Corps explicite envoyé au client (bonus) — plus jamais de body vide.
+  static String _statusBody(OrderStatus s) => switch (s) {
+        OrderStatus.pending =>
+          'Votre commande est en attente de confirmation par le vendeur.',
+        OrderStatus.confirmed =>
+          'Le vendeur a confirmé votre commande — elle est en préparation.',
+        OrderStatus.delivered =>
+          'Votre commande est livrée. Merci pour votre achat sur Vendora !',
+        OrderStatus.cancelled => 'Votre commande a été annulée.',
       };
 
   /// Statistiques vendeur (BONUS) — calculées sur ses commandes.
