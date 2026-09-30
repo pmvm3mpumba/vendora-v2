@@ -39,8 +39,11 @@ class ProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AspectRatio(
-            aspectRatio: 0.95,
+          // Image FLEXIBLE : elle occupe tout l'espace laissé par les
+          // textes (nom/vendeur/prix/disponibilité = hauteur fixe), donc
+          // AUCUN dépassement vertical possible, quels que soient la
+          // grille, la police ou l'écran.
+          Expanded(
             child: Container(
               decoration: BoxDecoration(
                 color: context.isDark ? context.cardColor : tint,

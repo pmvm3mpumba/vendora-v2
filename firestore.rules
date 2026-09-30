@@ -28,7 +28,16 @@ service cloud.firestore {
     match /products/{id} {
       allow read: if true; // visiteurs inclus
       allow create: if isSeller() && request.resource.data.sellerId == request.auth.uid;
+      // Le vendeur propriétaire gère tout.
       allow update, delete: if isSeller() && resource.data.sellerId == request.auth.uid;
+      // Ajustement ATOMIQUE du stock piloté par les transactions :
+      //   • décrément quand un client passe commande,
+      //   • ré-incrément quand le client annule une commande en attente.
+      // Seul le champ `stock` peut changer (jamais en négatif) ; toute
+      // autre modification d'un produit reste interdite aux non-vendeurs.
+      allow update: if signedIn()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock'])
+          && request.resource.data.stock >= 0;
     }
 
     // ---- Catégories --------------------------------------------------------
