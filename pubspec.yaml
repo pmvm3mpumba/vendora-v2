@@ -1,0 +1,40 @@
+name: vendora
+description: "Vendora — Application e-commerce Flutter + Firebase (Examen final)."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  firebase_storage: ^12.3.4
+
+  # État
+  provider: ^6.1.2
+
+  # Fonctionnalités
+  image_picker: ^1.1.2
+  url_launcher: ^6.3.0
+  cached_network_image: ^3.4.1
+  shared_preferences: ^2.3.2 # persistance du thème (dark mode — bonus)
+
+  # Divers
+  intl: ^0.19.0
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/test/ # images de démo (seed) — toujours disponibles, même hors-ligne

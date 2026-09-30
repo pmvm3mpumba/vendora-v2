@@ -1,0 +1,57 @@
+6. Product Catalogue Products must be retrieved from Cloud Firestore. 
+Users must be able to: 
+● View available products. 
+● View product details. 
+● Search by name. 
+● Filter by category. 
+● See price and currency. 
+● See available stock. 
+● Identify the seller. The application must properly handle: 
+● Loading state. 
+● Empty product list. 
+● Firebase errors. 
+● Product no longer available. 
+
+7. Shopping Cart Authenticated clients must be able to add products to a cart. 
+The cart must support: 
+● Add product. 
+● Increase quantity. 
+● Decrease quantity. 
+● Remove product. 
+● Calculate subtotal. 
+● Validate stock availability. 
+------------------------------------------------------------------------------------
+Client An authenticated client can: 
+● Browse products. 
+● Search/filter products. 
+● Add products to a cart. 
+● Modify quantities. 
+● Remove products. 
+● Select a currency. 
+● Place orders. 
+● Choose delivery or physical pickup. 
+● Provide delivery information. 
+● Simulate payment. 
+● View order history. 
+● View order details. 
+● Send the order to the seller through WhatsApp. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Seller An authenticated seller can: 
+● Create products. 
+● View their products. 
+● Edit their own products. 
+● Delete their own products. 
+● Manage product stock. 
+● View orders concerning their products.
+● Provide/manage their WhatsApp number.
+A seller must not be able to modify another seller's products. 
+
+
+-----------------------------------------------------------------------------------
+
+
+on a pas encore creer lee categories, ca bloque la gestion des images.
+Creation d'abords par defaut 12 categories,m chacu avec un logos.
+
